@@ -1,0 +1,112 @@
+# 医患对话工作流系统 - 使用说明
+
+## 新增功能：起始案例选择
+
+现在您可以在运行代码时选择起始案例，避免每次都从头开始运行所有病例。
+
+## 使用方法
+
+### 1. 运行指定范围的病例
+
+```bash
+# 运行病例1到10
+python doctor_patient_dialogue.py --start 1 --end 10
+
+# 运行病例50到100
+python doctor_patient_dialogue.py --start 50 --end 100
+
+# 运行病例1到154（全部病例）
+python doctor_patient_dialogue.py --start 1 --end 154
+
+# 自定义对话轮次
+python doctor_patient_dialogue.py --start 1 --end 10 --rounds 10
+```
+
+### 2. 运行单个病例
+
+```bash
+# 运行单个病例（例如病例5）
+python doctor_patient_dialogue.py --single 5
+
+# 运行单个病例并自定义轮次
+python doctor_patient_dialogue.py --single 5 --rounds 10
+```
+
+### 3. 默认行为（向后兼容）
+
+如果不指定任何参数，系统将运行病例1到154（全部病例）：
+
+```bash
+python doctor_patient_dialogue.py
+```
+
+## 命令行参数说明
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `--start` | 整数 | 1 | 起始病例ID |
+| `--end` | 整数 | 154 | 结束病例ID |
+| `--rounds` | 整数 | 15 | 每个病例的对话轮次 |
+| `--single` | 整数 | 无 | 运行单个病例（指定病例ID） |
+
+## 使用示例
+
+### 示例1：从上次中断的地方继续
+
+假设您上次运行到了病例50，现在想从病例51开始继续：
+
+```bash
+python doctor_patient_dialogue.py --start 51 --end 154
+```
+
+### 示例2：测试特定范围的病例
+
+如果您只想测试抑郁症病例（病例1-63）：
+
+```bash
+python doctor_patient_dialogue.py --start 1 --end 63
+```
+
+### 示例3：测试非抑郁症病例
+
+如果您只想测试非抑郁症病例（病例64-154）：
+
+```bash
+python doctor_patient_dialogue.py --start 64 --end 154
+```
+
+### 示例4：快速测试单个病例
+
+如果您想快速测试某个特定病例：
+
+```bash
+python doctor_patient_dialogue.py --single 25 --rounds 5
+```
+
+## 输出文件
+
+- 每个病例的对话结果保存在 `dialogue_results/dialogue_result_case_<ID>.json`
+- 汇总结果保存在 `dialogue_results/summary.json`
+- 所有对话的文本格式保存在 `dialogue_results/all_dialogues.txt`
+
+## 注意事项
+
+1. **病例ID范围**：病例ID从1到154
+2. **对话轮次**：每个病例默认进行15轮对话
+3. **文件检查**：系统会自动检查必要的病例数据文件是否存在
+4. **错误处理**：如果某个病例处理失败，系统会继续处理下一个病例
+5. **进度显示**：系统会显示当前处理的病例ID和进度信息
+
+## 故障排除
+
+如果遇到问题，请检查：
+
+1. 所有必要的文件是否存在：
+   - `标准病例案例信息.txt`
+   - `抑郁症标准病例编号和症状总结.xlsx`
+   - `阴性标准病编号和对应疾病.xlsx`
+
+2. 环境变量是否正确设置：
+   - `OPENAI_API_KEY` 或 `PATIENT_LLM_API_KEY` 和 `DOCTOR_LLM_API_KEY`
+
+3. 病例ID是否在有效范围内（1-154）
